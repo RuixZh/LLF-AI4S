@@ -1,3 +1,5 @@
+# how to initialize a new model in hf format
+
 from transformers import AutoConfig, AutoModelForCausalLM, AutoTokenizer
 
 tokenizer = AutoTokenizer.from_pretrained('google/gemma-2b')
