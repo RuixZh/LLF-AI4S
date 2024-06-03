@@ -19,7 +19,7 @@
 
 \[ English | [中文](README_zh.md) \]
 
-This is a fork from official version https://github.com/hiyouga/LLaMA-Factory. 
+This is a fork from official version https://github.com/hiyouga/LLaMA-Factory to try something for AI4Science.
 
 
 **Fine-tuning a large language model can be easy as...**
