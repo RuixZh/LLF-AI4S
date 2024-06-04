@@ -8,6 +8,8 @@ from ..utils import create_custom_optimzer, create_custom_scheduler
 from collections import defaultdict
 import os
 import torch
+from pathlib import Path
+
 
 if TYPE_CHECKING:
     from transformers import ProcessorMixin
@@ -56,6 +58,19 @@ class CustomTrainer(Trainer):
             os.makedirs(model_output_dir, exist_ok=True)
             self.model.base_model.model.save_pretrained(model_output_dir)
             self.tokenizer.save_pretrained(model_output_dir)
+
+        if self.finetuning_args.link_latest:
+            latest_path = Path('/'.join(output_dir.split('/')[:-1])) / "latest"
+            latest_path.unlink(missing_ok=True)
+            try:
+                latest_path.symlink_to(output_dir.split('/')[-1], target_is_directory=True)
+            except FileExistsError:
+                # Same as above, caught when another (file-system) local rank 0 has already made the 'latest' symlink.
+                # This can happen when nodes are saving to a common NFS drive but otherwise have distinct
+                # file-systems.
+                if latest_path.resolve().name != output_dir:
+                    raise
+
     # def save_model(self, output_dir: Optional[str] = None, _internal_call: bool = False):
     #     if self.processor is not None:
     #         output_dir = output_dir if output_dir is not None else self.args.output_dir
