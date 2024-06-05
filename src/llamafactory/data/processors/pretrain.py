@@ -31,5 +31,4 @@ def preprocess_pretrain_dataset(
         if data_args.template == "gemma":
             for i in range(len(result["input_ids"])):
                 result["input_ids"][i][0] = tokenizer.bos_token_id
-    # print(len(result['input_ids']),len(result['input_ids'][0]),result['input_ids'][0][:5])
     return result
